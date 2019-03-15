@@ -26,7 +26,8 @@ public class MyCrawler extends WebCrawler {
 
     private List<SolrInputDocument> documentsIndexed = new CopyOnWriteArrayList<>();
 
-    private static final String SERVER_URL_RIAL = "http://localhost:32768/solr/mycore";
+    //private static final String SERVER_URL = "http://localhost:32768/solr/mycore"; //RIAL
+    private static final String SERVER_URL = "http://localhost:32769/solr/core_one"; //CLARET
 
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
@@ -49,13 +50,18 @@ public class MyCrawler extends WebCrawler {
             Document doc = Jsoup.parse(html);
             SolrInputDocument doSolrInputDocument = new SolrInputDocument();
             doSolrInputDocument.setField("id", page.hashCode());
-            SolrServer solr = new HttpSolrServer(SERVER_URL_RIAL);
 
-            Elements paragraphList = doc.getElementsByTag("p");
+            SolrServer solr = new HttpSolrServer(SERVER_URL);
+
+            /*Elements paragraphList = doc.getElementsByTag("p");
             for (Element parElement : paragraphList) {
                 String paragraphText = parElement.text();
-                doSolrInputDocument.setField("features", paragraphText);
+                doSolrInputDocument.addField("features", paragraphText);
             }
+            */
+
+            String docText = doc.text();
+            doSolrInputDocument.addField("features", docText);
 
             documentsIndexed.add(doSolrInputDocument);
 
