@@ -46,8 +46,6 @@ public class Controller {
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
 
-
-
         try {
             CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
             controller.addSeed("https://www.vegan.com/");
@@ -57,13 +55,12 @@ public class Controller {
         }
     }
 
-    public static void deleteAllSolrData() {
+    private static void deleteAllSolrData() {
         HttpSolrServer solr = new HttpSolrServer(SERVER_URL);
         try {
             solr.deleteByQuery("*:*");
         } catch (SolrServerException | IOException e) {
-            throw new RuntimeException("Failed to delete data in Solr. "
-                    + e.getMessage(), e);
+            throw new RuntimeException("Failed to delete data in Solr. " + e.getMessage(), e);
         }
     }
 }
