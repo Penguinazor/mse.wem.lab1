@@ -11,7 +11,7 @@ import java.io.IOException;
 public class Controller {
 
     //private static final String SERVER_URL = "http://localhost:32768/solr/mycore"; //RIAL
-    private static final String SERVER_URL = "http://localhost:32769/solr/core_one"; //CLARET
+    private static final String SERVER_URL = "http://localhost:32770/solr/core_one"; //CLARET
 
     public static void main(String[] args) {
 
@@ -34,10 +34,10 @@ public class Controller {
         config.setUserAgentString("crawler4j/WEM/2019");
 
         // max 2-3 levels for tests on large website
-        config.setMaxDepthOfCrawling(5);
+        config.setMaxDepthOfCrawling(2);
 
         // -1 for unlimited number of pages
-        config.setMaxPagesToFetch(10);
+        config.setMaxPagesToFetch(2000);
 
         /*
          * Instantiate the controller for this crawl.
@@ -48,7 +48,7 @@ public class Controller {
 
         try {
             CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
-            controller.addSeed("https://www.vegan.com/");
+            controller.addSeed("https://arxiv.org");
             controller.start(MyCrawler.class, numberOfCrawlers);
         } catch (Exception e) {
             e.printStackTrace();

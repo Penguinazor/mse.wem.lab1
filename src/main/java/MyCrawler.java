@@ -25,12 +25,12 @@ public class MyCrawler extends WebCrawler {
     private List<SolrInputDocument> documentsIndexed = new CopyOnWriteArrayList<>();
 
     //private static final String SERVER_URL = "http://localhost:32768/solr/mycore"; //RIAL
-    private static final String SERVER_URL = "http://localhost:32769/solr/core_one"; //CLARET
+    private static final String SERVER_URL = "http://localhost:32770/solr/core_one"; //CLARET
 
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
         String href = url.getURL().toLowerCase();
-        return !FILTERS.matcher(href).matches() && href.startsWith("https://www.vegan.com/");
+        return !FILTERS.matcher(href).matches() && href.startsWith("https://arxiv.org");
     }
 
     @Override
@@ -61,7 +61,7 @@ public class MyCrawler extends WebCrawler {
             String docText = doc.text();
             doSolrInputDocument.addField("features", docText);
 
-            documentsIndexed.add(doSolrInputDocument);
+            //TODO add feature extraction here for indexation
 
             if (documentsIndexed.size() > 1) {
                 try {
