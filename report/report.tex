@@ -12,6 +12,7 @@
 \usepackage{xspace}
 \usepackage{url}
 \usepackage{lmodern}
+\usepackage{float}
 
 \definecolor{myblue}{rgb}{0.33,0.61,0.83}
 \definecolor{mygreen}{rgb}{0.39,0.56,0.31}
@@ -103,7 +104,54 @@ Each visited page has its content indexed by Solr.
 \end{itemize}
 
 \section{Specific Indexation}
+As a continuation of our work on the crawler, and a starting point for a more advanced specification, we duplicated our class \textbf{MyCrawler} into \textbf{MyCrawler2}. Indeed, the purpose here is to upgrade our crawler to gather more meaningful information.\\
 
+In a will to make our indexation more performant, we increased the page limit to 2000 and removed the deepness limit.
+
+We are parsing the following elements:
+\begin{itemize}
+\item en\_doc\_title: The title of the page (Fig. \ref{fig:title})
+\item en\_doc\_body: The body of the page, its content
+\item en\_doc\_categories: The categories of the page (Fig. \ref{fig:categories})
+\item en\_doc\_topics: The topics of the page, the <h3> (Fig. \ref{fig:topics})
+\item en\_doc\_infobox: The infobox of the page (Fig. \ref{fig:infobox})
+\item en\_doc\_language: The language of the page
+\item en\_doc\_navigations: The navigation of the page (Fig. \ref{fig:navigation})
+\item en\_doc\_url: The URL of the page
+\end{itemize}
+
+
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{imgs/title}
+	\caption{Wikipedia Title}
+	\label{fig:title}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[scale=0.5]{imgs/categories}
+	\caption{Wikipedia Categories}
+	\label{fig:categories}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{imgs/topics}
+    \caption{Wikipedia Topics}
+    \label{fig:topics}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{imgs/infobox}
+    \caption{Wikipedia Infobox}
+    \label{fig:infobox}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[scale=0.5]{imgs/navigation}
+	\caption{Wikipedia Navigation}
+	\label{fig:navigation}
+\end{figure}
 
 \section{Research}
 

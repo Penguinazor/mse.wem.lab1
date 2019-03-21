@@ -33,10 +33,10 @@ public class Controller {
         config.setUserAgentString("crawler4j/WEM/2019");
 
         // max 2-3 levels for tests on large website
-        config.setMaxDepthOfCrawling(2);
+        //config.setMaxDepthOfCrawling(2);
 
         // -1 for unlimited number of pages
-        config.setMaxPagesToFetch(10);
+        config.setMaxPagesToFetch(2000);
 
         /*
          * Instantiate the controller for this crawl.
@@ -48,7 +48,7 @@ public class Controller {
         try {
             CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
             //controller.addSeed("https://arxiv.org");
-            controller.addSeed("https://en.wikipedia.org/wiki/Veganism");
+            controller.addSeed(Config.SEED);
             deleteAllSolrData();
             //controller.start(MyCrawler.class, numberOfCrawlers);
             controller.start(MyCrawler2.class, numberOfCrawlers);

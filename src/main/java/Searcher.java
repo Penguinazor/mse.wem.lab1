@@ -71,8 +71,8 @@ public class Searcher {
 
             System.out.println("=================");
             System.out.println("QUERY: " + query);
-            System.out.println("NUMBER OF DOCUMENTS FOUND: " + documents.getNumFound());
-            System.out.println("TOTAL DOCUMENTS IN INDEX: " + solr.query(solarQuery).getResults().getNumFound());
+            System.out.println("DOCUMENTS FOUND: " + documents.getNumFound());
+            System.out.println("TOTAL INDEX: " + solr.query(solarQuery).getResults().getNumFound());
             System.out.println("=================");
             for (SolrDocument document : documents) {
                 System.out.println("title: " + document.get("en_doc_title"));
