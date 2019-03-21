@@ -167,7 +167,13 @@ We imagine different solutions to handle multiple languages with Solr:
 \end{itemize}
 If we have few languages to querying we proposed to use the first solution but if we have a lot of languages we propose to use the third solution. \\
 
-\textbf{Solr allows by default to do a fuzzy search. Please explain what it is and how Solr implements it. Some first names may have a lot of spelling variations (eg Caitlin : Caitilin, Caitlen, Caitlinn, Caitlyn, Caitlyne, Caitlynn, Cateline, Catelinn, Catelyn, Catelynn, Catlain, Catlin, Catline, Catlyn, Catlynn, Kaitlin, Kaitlinn, Kaitlyn, Kaitlynn, Katelin, Katelyn, Katelynn, etc). Is it possible to use, while keeping a good performance, the fuzzy research made available by Solr to do research taking into account such variations? If not what alternative(s) do you see, please justify your answer.}
+\textbf{Solr allows by default to do a fuzzy search. Please explain what it is and how Solr implements it. Some first names may have a lot of spelling variations (eg Caitlin : Caitilin, Caitlen, Caitlinn, Caitlyn, Caitlyne, Caitlynn, Cateline, Catelinn, Catelyn, Catelynn, Catlain, Catlin, Catline, Catlyn, Catlynn, Kaitlin, Kaitlinn, Kaitlyn, Kaitlynn, Katelin, Katelyn, Katelynn, etc). Is it possible to use, while keeping a good performance, the fuzzy research made available by Solr to do research taking into account such variations? If not what alternative(s) do you see, please justify your answer.} \\
+
+The fuzzy search matches a term when the edit distance between the query and the document's term is under an arbitrary threshold. According to the JavaDoc, this threshold is by default at $2$. \\
+
+Yes, it is possible to use the fuzzy search and keeping good performance. Solr is based on Lucene and from its version 4 this library uses a Levenshtein Automaton, a deterministic automaton (DFA) that accepts only the terms within edit distance $N$. It is possible to compute this automaton of degree $N$ for an input word $W$ time linear in the length of $W$. \\
+
+For more informations: \url{http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.16.652}
 
 \end{document}
 
