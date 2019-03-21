@@ -31,9 +31,9 @@
 	columns=fullflexible,
 	breaklines=true,
 	tabsize=2,
-	commentstyle=\color{mygreen},
-	keywordstyle=\color{myblue},
-	stringstyle=\color{myorange}
+	%commentstyle=\color{mygreen},
+	%keywordstyle=\color{myblue},
+	%stringstyle=\color{myorange}
 }
 
 \setlength{\headheight}{50pt}
@@ -109,10 +109,17 @@ Each visited page has its content indexed by Solr.
 
 
 \section{Theorical questions}
-\subsection{Please explain what strategy should be adopted for indexing pages in several languages (each page is composed of only one language, but the corpus includes pages in several languages). What should you watch out for? Please explain the process you propose.}
+\textbf{Please explain what strategy should be adopted for indexing pages in several languages (each page is composed of only one language, but the corpus includes pages in several languages). What should you watch out for? Please explain the process you propose.} \\
 
+We imagine different solutions to handle multiple languages with Solr:
+\begin{itemize}  
+	\item The first solution is to defined different schema fields for every language like "\texttt{title\_fr}" or "\texttt{title\_en}" and applying filters to each language. The downside of this solution is the high memory consumption and complexity when many languages are present.
+	\item The second solution is to use a collection of same fields for all languages, add a field to store the langue and then apply a filter on it (e.g. \texttt{fq=language:english}). The downside of this solution is that we cannot use language specific features like lemmatisation and stemming.
+	\item The third solution is to create a Solr core for each language and route the queries to the right core.
+\end{itemize}
+If we have few languages to querying we proposed to use the first solution but if we have a lot of languages we propose to use the third solution. \\
 
-\subsection{Solr allows by default to do a fuzzy search. Please explain what it is and how Solr implements it. Some first names may have a lot of spelling variations (eg Caitlin : Caitilin, Caitlen, Caitlinn, Caitlyn, Caitlyne, Caitlynn, Cateline, Catelinn, Catelyn, Catelynn, Catlain, Catlin, Catline, Catlyn, Catlynn, Kaitlin, Kaitlinn, Kaitlyn, Kaitlynn, Katelin, Katelyn, Katelynn, etc). Is it possible to use, while keeping a good performance, the fuzzy research made available by Solr to do research taking into account such variations? If not what alternative(s) do you see, please justify your answer.}
+\textbf{Solr allows by default to do a fuzzy search. Please explain what it is and how Solr implements it. Some first names may have a lot of spelling variations (eg Caitlin : Caitilin, Caitlen, Caitlinn, Caitlyn, Caitlyne, Caitlynn, Cateline, Catelinn, Catelyn, Catelynn, Catlain, Catlin, Catline, Catlyn, Catlynn, Kaitlin, Kaitlinn, Kaitlyn, Kaitlynn, Katelin, Katelyn, Katelynn, etc). Is it possible to use, while keeping a good performance, the fuzzy research made available by Solr to do research taking into account such variations? If not what alternative(s) do you see, please justify your answer.}
 
 \end{document}
 

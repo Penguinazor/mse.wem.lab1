@@ -34,3 +34,7 @@ hs_err_pid*
 *.DS_Store
 
 report/\.texpadtmp/
+*.aux
+*.fdb_latexmk
+*.fls
+*.synctex.gz
