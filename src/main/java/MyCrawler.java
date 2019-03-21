@@ -25,12 +25,15 @@ public class MyCrawler extends WebCrawler {
     private List<SolrInputDocument> documentsIndexed = new CopyOnWriteArrayList<>();
 
     //private static final String SERVER_URL = "http://localhost:32768/solr/mycore"; //RIAL
-    private static final String SERVER_URL = "http://localhost:32770/solr/core_one"; //CLARET
+    private static final String SERVER_URL = "http://localhost:32769/solr/core_one"; //CLARET
+
+    private Integer docCounter = 0;
+    private static final Integer untilCommit = 50;
 
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
         String href = url.getURL().toLowerCase();
-        return !FILTERS.matcher(href).matches() && href.startsWith("https://arxiv.org");
+        return !FILTERS.matcher(href).matches() && href.startsWith("https://en.wikipedia.org/wiki/");
     }
 
     @Override
@@ -58,25 +61,30 @@ public class MyCrawler extends WebCrawler {
             }
             */
 
-            String docText = doc.text();
-            doSolrInputDocument.addField("features", docText);
+            String page_title = doc.title();
+            String page_body = doc.body().text();
+
+            doSolrInputDocument.setField("doc_title_en", page_title);
+            doSolrInputDocument.setField("doc_body_en", page_body);
 
             //TODO add feature extraction here for indexation
 
-            if (documentsIndexed.size() > 1) {
-                try {
-                    solr.add(doSolrInputDocument);
+            try {
+                solr.add(doSolrInputDocument);
 
+                if (docCounter++ % untilCommit == 0)
                     solr.commit(true, true);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    e.printStackTrace();
-                }
+                System.out.println("docCounter: " + docCounter);
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
 
             System.out.println("Text length: " + text.length());
             System.out.println("Html length: " + html.length());
             System.out.println("Number of outgoing links: " + links.size());
+            System.out.println("=================");
         }
     }
 }

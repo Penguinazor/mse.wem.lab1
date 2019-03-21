@@ -52,9 +52,55 @@ Web Mining}
 \begin{document}
 
 \part*{Lab 1: Crawling, indexation and webpage research}
+During this web mining laboratory, we explored the website crawling with Crawler4j and its indexation with Solr via jsoup, which is HTML parser. We finally used the indexation to perform searches.\\
 
+We used docker-solr as docker image for our Solr.
 
 \section{Crawler}
+\subsection{Core}
+We started by creating a core for Solr, named \textit{core\_one} using the following commands:\\
+
+\begin{lstlisting}[language=sh]
+$ docker exec -u 0 -it docker-solr bash to attach to the docker bash
+\end{lstlisting}
+
+then
+
+\begin{lstlisting}[language=sh]
+$ bin/solr create -c core_one to create a default core.properties
+\end{lstlisting}
+
+As we set \textit{update.autoCreateFields} to \textbf{false} in our core. We had to create two custom fields: \textit{doc\_title\_en} and \textit{doc\_body\_en}, which will be used to store the title and the body of each retained pages by the crawler.
+\\
+\subsection{Crawler4j}
+We configured our crawler, \textit{MyCrawler.java} to work with our Solr core \textit{core\_one}. Concerning our first crawler configuration:\\
+
+\begin{itemize}  
+\item starting page: wikipedia.org at "Veganism" page
+\item domain limitation: yes
+\item maximum pages to fetch: 70
+\item maximum deepness: 3
+\item politeness delay: 500
+\item https: yes
+\item FILTERS: custom binary files
+\end{itemize}
+
+\subsubsection{shouldVisit function}
+We are applying the \textbf{FILTERS} pattern matching on the URL and verify that the domain.
+
+\subsubsection{visit function}
+
+The crawler retrieves the HTML page and parses them with jSoup. It creates a Solr document with the id field (hashcode of the page), the \textit{doc\_title\_en} (title from the page), and \textit{doc\_body\_en} (body content from the page) and finally adds the document into the current Solr instance.
+
+To avoid Solr overloads, we set a loader for the commits. Indeed, the program will stock 50 documents before committing them to the Solr as a batch.
+
+Each visited page has its content indexed by Solr.
+
+\subsection{Tries and fails}
+\begin{itemize}  
+\item We first indexed \textbf{Vegan.com}, but the pages were not meaningful from a feature point of view, indeed it had no categories.
+\item We then indexed  \textbf{arxiv.org}, but their \textit{"robots.txt"} policy was not allowing us to go anywhere.
+\end{itemize}
 
 \section{Specific Indexation}
 
@@ -69,3 +115,4 @@ Web Mining}
 \subsection{Solr allows by default to do a fuzzy search. Please explain what it is and how Solr implements it. Some first names may have a lot of spelling variations (eg Caitlin : Caitilin, Caitlen, Caitlinn, Caitlyn, Caitlyne, Caitlynn, Cateline, Catelinn, Catelyn, Catelynn, Catlain, Catlin, Catline, Catlyn, Catlynn, Kaitlin, Kaitlinn, Kaitlyn, Kaitlynn, Katelin, Katelyn, Katelynn, etc). Is it possible to use, while keeping a good performance, the fuzzy research made available by Solr to do research taking into account such variations? If not what alternative(s) do you see, please justify your answer.}
 
 \end{document}
+
