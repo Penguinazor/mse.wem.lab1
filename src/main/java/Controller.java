@@ -10,10 +10,7 @@ import java.io.IOException;
 
 public class Controller {
 
-    //private static final String SERVER_URL = "http://localhost:32768/solr/mycore"; //RIAL
-    private static final String SERVER_URL = "http://localhost:32769/solr/core_one"; //CLARET
-
-    private final static HttpSolrServer solr = new HttpSolrServer(SERVER_URL);
+    private final static HttpSolrServer solr = new HttpSolrServer(Config.SERVER_URL);
 
     public static void main(String[] args) {
 

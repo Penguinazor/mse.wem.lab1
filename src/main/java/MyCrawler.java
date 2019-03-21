@@ -13,19 +13,10 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("Duplicates")
 public class MyCrawler extends WebCrawler {
 
-    private static final Pattern FILTERS =
-            Pattern.compile(
-                    ".*(\\.(css|js|bmp|gif|jpe?g"
-                            + "|png|tiff?|mid|mp2|mp3|mp4"
-                            + "|wav|avi|mov|mpeg|ram|m4v|pdf"
-                            + "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
-
     private List<SolrInputDocument> documentsIndexed = new CopyOnWriteArrayList<>();
-
-    //private static final String SERVER_URL = "http://localhost:32768/solr/mycore"; //RIAL
-    private static final String SERVER_URL = "http://localhost:32769/solr/core_one"; //CLARET
 
     private Integer docCounter = 0;
     private static final Integer untilCommit = 50;
@@ -33,10 +24,7 @@ public class MyCrawler extends WebCrawler {
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
         String href = url.getURL().toLowerCase();
-        return !FILTERS.matcher(href).matches() && href.startsWith("https://arxiv.org/");
-        //return !FILTERS.matcher(href).matches() && href.startsWith("https://en.wikipedia.org/wiki/");
-
-
+        return !Config.FILTERS.matcher(href).matches() && href.startsWith(Config.DOMAIN);
     }
 
     @Override
@@ -55,7 +43,7 @@ public class MyCrawler extends WebCrawler {
             SolrInputDocument doSolrInputDocument = new SolrInputDocument();
             doSolrInputDocument.setField("id", page.hashCode());
 
-            SolrServer solr = new HttpSolrServer(SERVER_URL);
+            SolrServer solr = new HttpSolrServer(Config.SERVER_URL);
 
             /*Elements paragraphList = doc.getElementsByTag("p");
             for (Element parElement : paragraphList) {
@@ -75,7 +63,7 @@ public class MyCrawler extends WebCrawler {
             try {
                 solr.add(doSolrInputDocument);
 
-                if (docCounter++ % untilCommit == 0)
+                if (docCounter++ % Config.UNTIL_COMMIT == 0)
                     solr.commit(true, true);
                 System.out.println("docCounter: " + docCounter);
 
