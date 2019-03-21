@@ -5,7 +5,6 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
-import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer;
 
 import java.io.IOException;
 
@@ -18,7 +17,7 @@ public class Controller {
 
     public static void main(String[] args) {
 
-        int numberOfCrawlers = 2;
+        int numberOfCrawlers = 10;
 
         /*
          * Crawler4J configuration
@@ -40,7 +39,7 @@ public class Controller {
         config.setMaxDepthOfCrawling(2);
 
         // -1 for unlimited number of pages
-        config.setMaxPagesToFetch(70);
+        config.setMaxPagesToFetch(10);
 
         /*
          * Instantiate the controller for this crawl.
@@ -51,9 +50,11 @@ public class Controller {
 
         try {
             CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
+            //controller.addSeed("https://arxiv.org");
             controller.addSeed("https://en.wikipedia.org/wiki/Veganism");
             deleteAllSolrData();
-            controller.start(MyCrawler.class, numberOfCrawlers);
+            //controller.start(MyCrawler.class, numberOfCrawlers);
+            controller.start(MyCrawler2.class, numberOfCrawlers);
             solr.commit(true,true);
         } catch (Exception e) {
             e.printStackTrace();

@@ -7,13 +7,17 @@ import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
-public class MyCrawler extends WebCrawler {
+@SuppressWarnings("Duplicates")
+public class MyCrawler2 extends WebCrawler {
 
     private static final Pattern FILTERS =
             Pattern.compile(
@@ -33,10 +37,8 @@ public class MyCrawler extends WebCrawler {
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
         String href = url.getURL().toLowerCase();
-        return !FILTERS.matcher(href).matches() && href.startsWith("https://arxiv.org/");
-        //return !FILTERS.matcher(href).matches() && href.startsWith("https://en.wikipedia.org/wiki/");
-
-
+        //return !FILTERS.matcher(href).matches() && href.startsWith("https://arxiv.org/");
+        return !FILTERS.matcher(href).matches() && href.startsWith("https://en.wikipedia.org/wiki/");
     }
 
     @Override
@@ -56,21 +58,55 @@ public class MyCrawler extends WebCrawler {
             doSolrInputDocument.setField("id", page.hashCode());
 
             SolrServer solr = new HttpSolrServer(SERVER_URL);
-
-            /*Elements paragraphList = doc.getElementsByTag("p");
-            for (Element parElement : paragraphList) {
-                String paragraphText = parElement.text();
-                doSolrInputDocument.addField("features", paragraphText);
-            }
-            */
-
-            String page_title = doc.title();
-            String page_body = doc.body().text();
-
-            doSolrInputDocument.setField("doc_title_en", page_title);
-            doSolrInputDocument.setField("doc_body_en", page_body);
+            
 
             //TODO add feature extraction here for indexation
+
+
+            // Get page_title
+            String page_title = doc.getElementById("firstHeading").text();
+
+            String page_body = doc.body().text();
+
+            // Get page_categories
+            List<String> page_categories = new ArrayList<>();
+            Element category_element = doc.getElementById("mw-normal-catlinks");
+            if (category_element != null)
+                page_categories = category_element.getElementsByTag("li").eachText();
+
+            // Get page_topics
+            List<String> page_topics = new ArrayList<>();
+            Elements topics_elements = doc.getElementsByTag("h3");
+            if (topics_elements.first() != null)
+                page_topics = topics_elements.eachText();
+
+            // Get page_infobox
+            String page_infobox = "";
+            Element infoboxElement = doc.body().getElementsByClass("infobox").first();
+            if(infoboxElement != null)
+                page_infobox = infoboxElement.text();
+
+            // Get page_language
+            String page_language = doc.select("html").attr("lang");
+
+            // Get page_topics
+            List<String> page_navigations = new ArrayList<>();
+            Elements navigation_elements = doc.getElementsByClass("navbox");
+            if (navigation_elements.first() != null)
+                page_navigations = navigation_elements.eachText();
+
+            doSolrInputDocument.setField("en_doc_title", page_title);
+            doSolrInputDocument.setField("en_doc_body", page_body);
+            doSolrInputDocument.setField("en_doc_categories", page_categories);
+
+            doSolrInputDocument.setField("en_doc_topics", page_topics);
+            doSolrInputDocument.setField("en_doc_infobox", page_infobox);
+
+            doSolrInputDocument.setField("en_doc_language", page_language);
+
+            doSolrInputDocument.setField("en_doc_navigations", page_navigations);
+
+            doSolrInputDocument.setField("en_doc_url", page.getWebURL().getURL());
 
             try {
                 solr.add(doSolrInputDocument);
