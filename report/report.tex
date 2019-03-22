@@ -230,10 +230,17 @@ The fuzzy search matches a term when the edit distance between the query and the
 
 Yes, it is possible to use the fuzzy search and keeping good performance. Solr is based on Lucene, and from version 4, its library uses a Levenshtein Automaton, a deterministic automaton (DFA) that accepts only the terms within edit distance $N$. It is possible to compute this automaton of degree $N$ for an input word $W$ time linear in the length of $W$. \\
 
-Concerning the Caitlin example, by using the ~ operator, we can specify a distance, for exemple aitlin ~ 2. If it's still not enough, we can combine the fuzzy search with the OR operator: aitlin ~ 2 OR Kaitlynn ~ 2.
+Concerning the Caitlin example, by using the \textbf{\~} operator, we can specify a distance, for exemple \textit{aitlin \~{} 2}. If it's still not enough, we can combine the fuzzy search with the \textbf{OR} operator: \textit{aitlin \~{} 2 OR Kaitlynn \~{} 2}.
 
 However, in most of the cases, stemming gives similar results to the fuzzy search, and we could also mention the lemmatization.\\
 
-For more informations: \url{http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.16.652} 
+For more informations: \url{http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.16.652}
+
+\subsection{Conclusion}
+
+We learned a lot on the principle of webpage crawling with the help of this laboratory. Indeed, it was nice to see how Solr builds an index based on the crawled, and how it is possible to tweak the extracted features to make the indexation even better.\\
+
+Finally, we were pleasantly surprised about how well the search based on the Solr indexation work, we didn't expect to have such meaningful matchings.
+
 \end{document}
 
