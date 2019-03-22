@@ -53,9 +53,21 @@ Web Mining}
 \begin{document}
 
 \part*{Lab 1: Crawling, indexation and webpage research}
-During this web mining laboratory, we explored the website crawling with Crawler4j and its indexation with Solr via jsoup, which is HTML parser. We finally used the indexation to perform searches.\\
+In this web mining laboratory, we will implement a crawler that visits a website and push the data to a Solr server. We will also create some fields for indexing interesting data. Then we will create a searcher in Java that query data from the Solr server. The architecture is represented below: \\
 
-We used docker-solr as docker image for our Solr.
+\begin{center}
+	\includegraphics[scale=0.5]{architecture.png}
+\end{center}
+
+To implement the crawler, we used the library called Crawler4j and to parse the HTML we used Jsoup. These dependencies are automatically downloaded from Maven Central using Gradle. The following command runs our application: \\
+
+\begin{lstlisting}[language=sh]
+	$ gradle run
+\end{lstlisting}
+
+\vspace{6pt}
+
+To simplify the installation, we used docker-solr as docker image for our Solr.
 
 \section{Crawler}
 \subsection{Core}
