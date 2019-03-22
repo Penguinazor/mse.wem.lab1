@@ -154,6 +154,49 @@ We are parsing the following elements:
 \end{figure}
 
 \section{Research}
+Based on our MyCrawler2, we have asked to index up to 2000 webpages. Using the Solr web interface, we found out that 1995 documents were indeed indexed.\\
+
+Continuing with Solr web interface, we can also search with a specific query such as Lactose into a specific field we extracted via our crawler. For example: en\_doc\_body:Lactose. \\
+
+We implemented a searcher, Searcher.java, which also returns the score for each returned document. Moreover, we are using a weighting system on each extracted features. Indeed, the meaningfulness of each feature is not equivalent. \\
+
+After some tweaking, we came out with the following formula, where <query> is the user's query :\\
+
+q: (en\_doc\_title:<query>)\^{}6 (en\_doc\_topics:<query>)\^{}5 (en\_doc\_infobox:<query>)\^{}4\\
+(en\_doc\_categories:<query>)\^{}3 (en\_doc\_navigations:<query>)\^{}2 (en\_doc\_body:<query>)\^{}1\\
+
+
+We gave a weight of 6 for the title, a weight of 5 for the topics and so one. The lower is the weight; the lower is the importance is.\\
+
+The following are query examples:
+
+\begin{figure}[H]
+  
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{imgs/meat}
+    \caption{Search Query: meat}
+    \label{fig:meat}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{imgs/lactose}
+    \caption{Search Query: lactose}
+    \label{fig:lactose}
+  \end{minipage}
+  \\\\\\\\
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{imgs/dog-food}
+    \caption{Search Query: dog food}
+    \label{fig:dog-food}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{imgs/school}
+    \caption{Search Query: School}
+    \label{fig:school}
+  \end{minipage}
+\end{figure}
+
 
 
 \section{Theorical questions}
