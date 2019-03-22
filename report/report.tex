@@ -71,16 +71,16 @@ To simplify the installation, we used docker-solr as docker image for our Solr.
 
 \section{Crawler}
 \subsection{Core}
-We started by creating a core for Solr, named \textit{core\_one} using the following commands:\\
+We started by creating a core for Solr, named \textit{core\_one} using the following command to attach to the docker bash:\\
 
 \begin{lstlisting}[language=sh]
-$ docker exec -u 0 -it docker-solr bash to attach to the docker bash
+$ docker exec -u 0 -it docker-solr bash
 \end{lstlisting}
 
-then
+then this command to create a default core.properties
 
 \begin{lstlisting}[language=sh]
-$ bin/solr create -c core_one to create a default core.properties
+$ bin/solr create -c core_one
 \end{lstlisting}
 
 As we set \textit{update.autoCreateFields} to \textbf{false} in our core. We had to create two custom fields: \textit{doc\_title\_en} and \textit{doc\_body\_en}, which will be used to store the title and the body of each retained pages by the crawler.
@@ -92,7 +92,7 @@ We configured our crawler, \textbf{MyCrawler.java} to work with our Solr core \t
 \item starting page: wikipedia.org at "Veganism" page
 \item domain limitation: yes
 \item maximum pages to fetch: 70
-\item maximum deepness: 3
+\item maximum deepness: 2
 \item politeness delay: 500
 \item https: yes
 \item FILTERS: custom binary files
@@ -179,7 +179,7 @@ q: (en\_doc\_title:<query>)\^{}6 (en\_doc\_topics:<query>)\^{}5 (en\_doc\_infobo
 
 We gave a weight of 6 for the title, a weight of 5 for the topics and so one. The lower is the weight; the lower is the importance is.\\
 
-The following are query examples:
+The following figures from 6 to 9 are query examples:
 
 \begin{figure}[H]
   
